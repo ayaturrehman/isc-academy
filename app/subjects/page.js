@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
@@ -12,7 +13,7 @@ const blankForm = {
   category_id: null,
 };
 
-export default function SubjectsPage() {
+function SubjectsPageContent() {
   const searchParams = useSearchParams();
   const classIdParam = searchParams.get("class_id");
 
@@ -431,5 +432,13 @@ export default function SubjectsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SubjectsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SubjectsPageContent />
+    </Suspense>
   );
 }
