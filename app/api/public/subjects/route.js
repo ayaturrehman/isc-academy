@@ -6,9 +6,9 @@ export const dynamic = "force-dynamic";
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-    const classId = searchParams.get("class_id");
+    const categoryId = searchParams.get("category_id");
     
-    const subjects = await listSubjects(classId);
+    const subjects = await listSubjects(categoryId);
     return NextResponse.json({ subjects });
   } catch (error) {
     console.error("Failed to fetch public subjects", error);

@@ -1,6 +1,6 @@
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["rhel-openssl-3.0.x"]
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
   output        = "../node_modules/.prisma/client"
 }
 
@@ -49,26 +49,14 @@ model Chapter {
   @@map("chapters")
 }
 
-model Class {
-  id          Int       @id @default(autoincrement())
-  name        String    @unique
-  description String?
-  created_at  DateTime  @default(now())
-  subjects    Subject[]
-
-  @@map("classes")
-}
-
 model Subject {
-  id          Int      @id @default(autoincrement())
-  class_id    Int
+  id          Int       @id @default(autoincrement())
   name        String
   description String?
   book_id     Int?
   category_id Int?
-  created_at  DateTime @default(now())
-  class       Class    @relation(fields: [class_id], references: [id], onDelete: Cascade)
-  book        Book?    @relation(fields: [book_id], references: [id], onDelete: SetNull)
+  created_at  DateTime  @default(now())
+  book        Book?     @relation(fields: [book_id], references: [id], onDelete: SetNull)
   category    Category? @relation(fields: [category_id], references: [id], onDelete: SetNull)
 
   @@map("subjects")

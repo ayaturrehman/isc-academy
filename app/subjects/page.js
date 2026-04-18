@@ -8,23 +8,21 @@ const blankForm = {
   id: null,
   name: "",
   description: "",
-  class_id: null,
   book_id: null,
   category_id: null,
 };
 
 function SubjectsPageContent() {
   const searchParams = useSearchParams();
-  const classIdParam = searchParams.get("class_id");
+  const categoryIdParam = searchParams.get("category_id");
 
   const [subjects, setSubjects] = useState([]);
-  const [classes, setClasses] = useState([]);
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [form, setForm] = useState({
     ...blankForm,
-    class_id: classIdParam ? parseInt(classIdParam) : null,
+    category_id: categoryIdParam ? parseInt(categoryIdParam) : null,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -34,17 +32,6 @@ function SubjectsPageContent() {
     setError("");
     setMessage("");
   };
-
-  const loadClasses = useCallback(async () => {
-    try {
-      const res = await fetch("/api/classes", { cache: "no-store" });
-      if (!res.ok) throw new Error("Unable to load classes");
-      const data = await res.json();
-      setClasses(data.classes || []);
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
 
   const loadBooks = useCallback(async () => {
     try {
@@ -72,8 +59,8 @@ function SubjectsPageContent() {
     try {
       setLoading(true);
       setError("");
-      const url = classIdParam
-        ? `/api/subjects?class_id=${classIdParam}`
+      const url = categoryIdParam
+        ? `/api/subjects?category_id=${categoryIdParam}`
         : "/api/subjects";
       const res = await fetch(url, { cache: "no-store" });
       if (!res.ok) {
@@ -91,24 +78,19 @@ function SubjectsPageContent() {
     } finally {
       setLoading(false);
     }
-  }, [selectedId, classIdParam]);
+  }, [selectedId, categoryIdParam]);
 
   useEffect(() => {
-    loadClasses();
     loadBooks();
     loadCategories();
     loadSubjects();
-  }, [loadClasses, loadBooks, loadCategories, loadSubjects]);
+  }, [loadBooks, loadCategories, loadSubjects]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     resetStatus();
     if (!form.name.trim()) {
       setError("Subject name is required");
-      return;
-    }
-    if (!form.class_id) {
-      setError("Please select a class");
       return;
     }
     try {
@@ -118,7 +100,6 @@ function SubjectsPageContent() {
       const payload = {
         name: form.name.trim(),
         description: form.description.trim(),
-        class_id: form.class_id,
         book_id: form.book_id || null,
         category_id: form.category_id || null,
       };
@@ -134,7 +115,7 @@ function SubjectsPageContent() {
       setMessage(form.id ? "Subject updated" : "Subject created");
       setForm({
         ...blankForm,
-        class_id: classIdParam ? parseInt(classIdParam) : null,
+        category_id: categoryIdParam ? parseInt(categoryIdParam) : null,
       });
       await loadSubjects();
     } catch (err) {
@@ -164,7 +145,7 @@ function SubjectsPageContent() {
       if (form.id === id) {
         setForm({
           ...blankForm,
-          class_id: classIdParam ? parseInt(classIdParam) : null,
+          category_id: categoryIdParam ? parseInt(categoryIdParam) : null,
         });
       }
       await loadSubjects();
@@ -181,7 +162,6 @@ function SubjectsPageContent() {
       id: subject.id,
       name: subject.name,
       description: subject.description || "",
-      class_id: subject.class_id,
       book_id: subject.book_id || null,
       category_id: subject.category_id || null,
     });
@@ -189,14 +169,14 @@ function SubjectsPageContent() {
     resetStatus();
   };
 
-  const selectedClass = classes.find((c) => c.id === parseInt(classIdParam));
+  const selectedCategory = categories.find((c) => c.id === parseInt(categoryIdParam));
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-2xl font-semibold text-slate-900">
-            {selectedClass ? `${selectedClass.name} - Subjects` : "Subjects"}
+            {selectedCategory ? `${selectedCategory.name} - Subjects` : "Subjects"}
           </h2>
           <p className="text-sm text-slate-600">
             Manage subjects and link them to books or categories.
@@ -239,29 +219,6 @@ function SubjectsPageContent() {
                   placeholder="e.g., Mathematics"
                   disabled={loading}
                 />
-              </div>
-              <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
-                  Class
-                </label>
-                <select
-                  value={form.class_id || ""}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
-                      class_id: e.target.value ? parseInt(e.target.value) : null,
-                    })
-                  }
-                  className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  disabled={loading}
-                >
-                  <option value="">Select a class</option>
-                  {classes.map((cls) => (
-                    <option key={cls.id} value={cls.id}>
-                      {cls.name}
-                    </option>
-                  ))}
-                </select>
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium text-slate-700">
@@ -340,7 +297,7 @@ function SubjectsPageContent() {
                     onClick={() => {
                       setForm({
                         ...blankForm,
-                        class_id: classIdParam ? parseInt(classIdParam) : null,
+                        category_id: categoryIdParam ? parseInt(categoryIdParam) : null,
                       });
                       setSelectedId(null);
                       resetStatus();
@@ -383,11 +340,6 @@ function SubjectsPageContent() {
                           <h4 className="font-medium text-slate-900">
                             {subject.name}
                           </h4>
-                          {subject.class_name && (
-                            <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs text-blue-700">
-                              {subject.class_name}
-                            </span>
-                          )}
                         </div>
                         {subject.description && (
                           <p className="mt-1 text-sm text-slate-600">

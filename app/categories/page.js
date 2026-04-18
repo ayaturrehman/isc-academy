@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 
 const blankForm = { id: null, name: "", description: "" };
 
@@ -258,6 +259,12 @@ export default function CategoriesPage() {
                         </p>
                       </div>
                       <div className="flex shrink-0 gap-2">
+                        <Link
+                          href={`/subjects?category_id=${category.id}`}
+                          className="rounded-md border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100"
+                        >
+                          Subjects
+                        </Link>
                         <button
                           type="button"
                           onClick={() => handleEdit(category)}

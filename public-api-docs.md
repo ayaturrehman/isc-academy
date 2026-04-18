@@ -96,3 +96,45 @@
   }
 }
 ```
+
+---
+
+## **GET** `/api/public/subjects`
+
+Supports optional `?category_id={id}` query parameter to filter by category.
+
+```json
+{
+  "subjects": [
+    {
+      "id": 1,
+      "name": "Mathematics",
+      "description": "Basic mathematics course",
+      "book_id": 1,
+      "category_id": 2,
+      "created_at": "2025-10-26 19:35:00",
+      "book_title": "text book",
+      "category_name": "math"
+    }
+  ]
+}
+```
+
+---
+
+## **GET** `/api/public/subjects/:subjectId`
+
+```json
+{
+  "subject": {
+    "id": 1,
+    "name": "Mathematics",
+    "description": "Basic mathematics course",
+    "book_id": 1,
+    "category_id": 2,
+    "created_at": "2025-10-26 19:35:00",
+    "book_title": "text book",
+    "category_name": "math"
+  }
+}
+```

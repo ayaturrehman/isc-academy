@@ -9,7 +9,6 @@ const navItems = [
   { href: "/categories", label: "Categories" },
   { href: "/books", label: "Books" },
   { href: "/chapters", label: "Chapters" },
-  { href: "/classes", label: "Classes" },
   { href: "/subjects", label: "Subjects" },
 ];
 
@@ -53,7 +52,7 @@ export default function AdminShell({ children }) {
               ISC Academy Admin
             </h1>
             <p className="text-sm text-slate-600">
-              Manage categories, books, chapters, classes, and subjects.
+              Manage categories, books, chapters, and subjects.
             </p>
           </div>
           <div className="flex items-center gap-3">
