@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Book Library Admin",
+  title: "ISC Academy Admin",
   description:
     "Administration portal for managing categories, books, and chapters.",
 };
