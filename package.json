@@ -14,12 +14,10 @@
     "lint": "eslint",
     "db:migrate": "prisma migrate deploy",
     "db:seed": "prisma db seed",
-    "postinstall": "prisma generate",
     "seed": "node prisma/seed.js"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
-    "@prisma/engines": "6.18.0",
     "@vercel/blob": "^0.27.0",
     "dotenv": "^16.4.5",
     "next": "^16.2.4",
